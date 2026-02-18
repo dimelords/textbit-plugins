@@ -9,6 +9,8 @@ export const Factbox = ({ children, element, options, editor }: TBComponentProps
   const original_updated = element?.properties?.original_updated ?? ''
   const original_id = element?.properties?.original_id
   const removable = options?.removable as boolean ?? false
+  const locale = options?.locale as string
+
   const { headerTitle, modifiedLabel, footerTitle } =  options as { headerTitle?: string, modifiedLabel?: string, footerTitle?: string }
 
   const MESSAGE = footerTitle ?? 'Changes in the factbox text only affects this article'
@@ -44,7 +46,7 @@ export const Factbox = ({ children, element, options, editor }: TBComponentProps
             : null
           }
 
-          <FactboxModified modified={original_updated} modifiedLabel={modifiedLabel} />
+          <FactboxModified modified={original_updated} modifiedLabel={modifiedLabel} locale={locale} />
 
           {removable && (
             <>
