@@ -14,8 +14,7 @@ export const normalizeNode = (editor: Editor, nodeEntry: NodeEntry, listType: st
   const [, path] = nodeEntry
   const children = Array.from(Node.children(editor, path))
 
-
-  let n = 1
+  let n = 0
   for (const [child, childPath] of children) {
     if (TextbitElement.isBlock(child)) {
       // Unwrap block node children (move text element children upwards in tree)
@@ -39,10 +38,10 @@ export const normalizeNode = (editor: Editor, nodeEntry: NodeEntry, listType: st
     // If the two last elements are empty, remove last node and then convert
     // the remaining last node to normal text. This gives the appearance that
     // <enter> on a last empty list item converts it to a text node.
-    if (n === children.length && children.length > 1 && TextbitElement.isOfType(child, `${listType}/list-item`)) {
-      if (!TextbitEditor.hasText([children[n - 2], children[n - 1]])) {
-        const removePath = [childPath[0], n - 2]
-        const liftPath = [childPath[0], n - 1]
+    if (n === children.length - 1 && children.length > 1 && TextbitElement.isOfType(child, `${listType}/list-item`)) {
+      if (!TextbitEditor.hasText([children[n - 1], children[n]])) {
+        const removePath = [...path, n - 1]
+        const liftPath = [...path, n]
 
         Transforms.setNodes(
           editor,

@@ -1,19 +1,33 @@
 import type { TBComponentProps } from '@ttab/textbit'
-import { FilePen, MessageCircleWarning, X } from 'lucide-react'
+import { FilePen, MessageCircleWarning, SaveIcon, X } from 'lucide-react'
 import { FactboxModified } from './FactboxModified'
 import { FactboxHeaderItem } from './FactboxHeaderItem'
 import { type Descendant, Transforms } from 'slate'
 import { FocusBlock } from '../../components/FocusBlock'
 
 export const Factbox = ({ children, element, options, editor }: TBComponentProps) => {
-  const original_updated = element?.properties?.original_updated ?? ''
+  const originalUpdated = element?.properties?.original_updated ?? ''
   const original_id = element?.properties?.original_id
+  const unSaved = element?.properties?.unSaved as boolean
   const removable = options?.removable as boolean ?? false
   const locale = options?.locale as string
 
-  const { headerTitle, modifiedLabel, footerTitle } =  options as { headerTitle?: string, modifiedLabel?: string, footerTitle?: string }
+  const {
+    headerTitle,
+    modifiedLabel,
+    footerTitle,
+    saveToArchiveLabel,
+    unsavedLabel
+  } =  options as {
+    headerTitle?: string
+    modifiedLabel?: string
+    footerTitle?: string
+    saveToArchiveLabel?: string
+    unsavedLabel?: string
+  }
 
   const MESSAGE = footerTitle ?? 'Changes in the factbox text only affects this article'
+  const UNSAVED_MESSAGE = unsavedLabel ?? 'Factbox has not been saved to archive'
 
   return (
     <FocusBlock className='my-2'>
@@ -21,18 +35,46 @@ export const Factbox = ({ children, element, options, editor }: TBComponentProps
         <div
           contentEditable={false}
           draggable={true}
-          className='flex justify-start items-center m-1 p-2 bg-slate-100 dark:bg-slate-700 border-b-2 border-slate-200 ps-0.5 pb-[2px] pt-[1px] cursor-default'
+          className='flex justify-start items-center m-1 p-2 bg-slate-100 dark:bg-slate-700 border-b-2 border-slate-200 ps-0.5 pb-0.5 pt-px cursor-default'
           onMouseDown={(e) => { e.stopPropagation() }}
         >
           <FactboxHeaderItem
-            title={MESSAGE}
+            title={unSaved ? UNSAVED_MESSAGE : MESSAGE}
             icon={{
               icon: MessageCircleWarning,
               className: 'text-red-800 dark:text-red-500'
             }}
           />
 
-          {options?.onEditOriginal && typeof options.onEditOriginal === 'function' && original_id
+          {unSaved && options?.onSave
+            ? (
+              <>
+                <FactboxHeaderItem
+                  title={saveToArchiveLabel ?? 'Save to archive'}
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    const onSuccess = () => {
+                      const n = editor.children.findIndex((child: Descendant) => child.id === element.id)
+                      if (n > -1) {
+                        (Transforms.setNodes)(editor, { properties: { ...element.properties, unSaved: false } }, { at: [n] })
+                      }
+                    }
+
+                    (options?.onSave as (id: string, onSuccess: () => void) => void)(original_id as string, onSuccess)
+                  }}
+                  icon={{
+                    icon: SaveIcon
+                  }}
+                />
+                <div className='text-xs'>{UNSAVED_MESSAGE}</div>
+              </>
+            )
+            : null
+          }
+
+          {!unSaved && options?.onEditOriginal && typeof options.onEditOriginal === 'function' && original_id
             ? <FactboxHeaderItem
                 title={headerTitle ?? 'Edit the original factbox'}
                 onMouseDown={(e) => {
@@ -46,7 +88,13 @@ export const Factbox = ({ children, element, options, editor }: TBComponentProps
             : null
           }
 
-          <FactboxModified modified={original_updated} modifiedLabel={modifiedLabel} locale={locale} />
+          {!unSaved && (
+            <FactboxModified
+              modified={originalUpdated}
+              modifiedLabel={modifiedLabel}
+              locale={locale}
+            />
+          )}
 
           {removable && (
             <>

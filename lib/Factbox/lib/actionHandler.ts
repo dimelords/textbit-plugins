@@ -1,30 +1,43 @@
 import {
-  type Editor,
   type Descendant,
   Transforms
 } from 'slate'
 import { TextbitEditor } from '@ttab/textbit'
+import type { TBActionHandlerArgs } from '@ttab/textbit'
 
-
-export const actionHandler = ({ editor }: { editor: Editor }): void => {
+export const actionHandler = ({ editor, options }: TBActionHandlerArgs) => {
   const text = TextbitEditor.getSelectedText(editor)
+  const titleText = `${options?.factboxNewTitle as string ?? 'Facts'}:`
+  const id = crypto.randomUUID()
 
   const node: Descendant[] = [{
-    id: crypto.randomUUID(),
+    id,
     class: 'block',
-    type: 'core/blockquote',
+    type: 'core/factbox',
+    properties: {
+      original_id: id,
+      original_updated: new Date().toISOString(),
+      unSaved: true
+    },
     children: [
       {
         id: crypto.randomUUID(),
-        type: 'core/blockquote/body',
         class: 'text',
-        children: [{ text: text || '' }]
+        type: 'core/factbox/title',
+        children: [{ text: titleText }]
       },
       {
         id: crypto.randomUUID(),
-        type: 'core/blockquote/caption',
-        class: 'text',
-        children: [{ text: '' }]
+        class: 'block',
+        type: 'core/factbox/body',
+        children: [
+          {
+            id: crypto.randomUUID(),
+            class: 'text',
+            type: 'core/text',
+            children: [{ text: '' }]
+          }
+        ]
       }
     ]
   }]
@@ -32,9 +45,8 @@ export const actionHandler = ({ editor }: { editor: Editor }): void => {
   const position = TextbitEditor.position(editor) + (text ? 0 : 1)
   TextbitEditor.insertAt(editor, position, node)
 
-  const atChild = text ? 0 : 1
   Transforms.select(editor, {
-    anchor: { offset: 0, path: [position, atChild, 0] },
-    focus: { offset: 0, path: [position, atChild, 0] }
+    anchor: { offset: titleText.length, path: [position, 0, 0] },
+    focus: { offset: titleText.length, path: [position, 0, 0] }
   })
 }

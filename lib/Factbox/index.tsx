@@ -8,9 +8,10 @@ import { normalizeFactbox } from './lib/normalizeFactbox'
 import { consumes } from './lib/consumes'
 import { consume } from './lib/consume'
 import { FactboxBody } from './components/FactboxBody'
+import { actionHandler } from './lib/actionHandler'
+import { BoxIcon } from 'lucide-react'
 
 export const Factbox: TBPluginInitFunction = (options) => {
-
   return {
     class: 'block',
     name: 'core/factbox',
@@ -20,6 +21,13 @@ export const Factbox: TBPluginInitFunction = (options) => {
       consume
     },
     actions: [
+      {
+        name: 'core/factbox',
+        title: options?.addSingleLabel as string ?? 'Insert factbox',
+        tool: () => <BoxIcon style={{ width: '1em', height: '1em' }} />,
+        handler: actionHandler,
+        visibility: () => [true, true, false]
+      },
       {
         name: 'edit-factbox',
         handler: ({ editor, args }): void => {
@@ -40,7 +48,8 @@ export const Factbox: TBPluginInitFunction = (options) => {
                 original_updated: args?.original_updated as string,
                 original_version: args?.original_version as string,
                 locally_changed: args?.locally_changed as string,
-                original_id: args?.original_id as string
+                original_id: args?.original_id as string,
+                unSaved: args?.unSaved as boolean || false
               }
             },
             { at: path }

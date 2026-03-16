@@ -20,11 +20,14 @@ export const OrderedList: (options?: { title?: string }) => TBPluginDefinition =
         handler: ({ editor }): void => {
           actionHandler(editor, 'core/ordered-list')
         },
-        visibility: (element) => {
+        visibility: (element, innerElement) => {
+          const cursorElement = innerElement ?? element
           return [
-            ['core/ordered-list', 'core/unordered-list', 'core/text'].includes(element.type),
+            ['core/ordered-list', 'core/unordered-list', 'core/text',
+              'core/ordered-list/list-item', 'core/unordered-list/list-item'].includes(cursorElement.type),
             true,
-            element.type === 'core/ordered-list'
+            cursorElement.type === 'core/ordered-list'
+              || cursorElement.type === 'core/ordered-list/list-item'
           ]
         }
       }

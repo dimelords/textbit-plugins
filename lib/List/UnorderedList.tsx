@@ -18,11 +18,14 @@ export const UnorderedList: (options?: { title?: string }) => TBPluginDefinition
         handler: ({ editor }) => {
           actionHandler(editor, 'core/unordered-list')
         },
-        visibility: (element) => {
+        visibility: (element, innerElement) => {
+          const cursorElement = innerElement ?? element
           return [
-            ['core/ordered-list', 'core/unordered-list', 'core/text'].includes(element.type),
+            ['core/ordered-list', 'core/unordered-list', 'core/text',
+              'core/ordered-list/list-item', 'core/unordered-list/list-item'].includes(cursorElement.type),
             true,
-            element.type === 'core/unordered-list'
+            cursorElement.type === 'core/unordered-list'
+              || cursorElement.type === 'core/unordered-list/list-item'
           ]
         }
       }

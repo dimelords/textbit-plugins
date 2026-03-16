@@ -5,7 +5,7 @@ import {
   TextbitElement
 } from '@ttab/textbit'
 import { Link2OffIcon, LinkIcon, UnlinkIcon } from 'lucide-react'
-import { isValidLink } from '../../shared/isValidLink'
+import { isValidLink, sanitizeLink } from '../../shared/isValidLink'
 import { ReactEditor, useSlateStatic } from 'slate-react'
 
 export const EditLink = ({ entry }: TBToolComponentProps) => {
@@ -61,12 +61,13 @@ export const EditLink = ({ entry }: TBToolComponentProps) => {
           return
         }
 
-        if (url === '') {
+        const trimmedUrl = sanitizeLink(url)
+        if (trimmedUrl === '') {
           deleteLink(editor)
         } else {
           Transforms.setNodes(
             editor,
-            { properties: { ...node.properties, url } },
+            { properties: { ...node.properties, url: trimmedUrl } },
             { at: path }
           )
         }
