@@ -3,7 +3,7 @@ import { FilePen, MessageCircleWarning, SaveIcon, X } from 'lucide-react'
 import { FactboxModified } from './FactboxModified'
 import { FactboxHeaderItem } from './FactboxHeaderItem'
 import { type Descendant, Transforms } from 'slate'
-import { FocusBlock } from '../../components/FocusBlock'
+import { Block } from '../../components/FocusBlock'
 
 export const Factbox = ({ children, element, options, editor }: TBComponentProps) => {
   const originalUpdated = element?.properties?.original_updated ?? ''
@@ -30,7 +30,7 @@ export const Factbox = ({ children, element, options, editor }: TBComponentProps
   const UNSAVED_MESSAGE = unsavedLabel ?? 'Factbox has not been saved to archive'
 
   return (
-    <FocusBlock className='my-2'>
+    <Block className='my-2'>
       <div className='group border-2 rounded border-slate-200'>
         <div
           contentEditable={false}
@@ -130,6 +130,6 @@ export const Factbox = ({ children, element, options, editor }: TBComponentProps
           {MESSAGE}
         </div>
       </div>
-    </FocusBlock>
+    </Block>
   )
 }

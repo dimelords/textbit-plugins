@@ -11,9 +11,10 @@ export const normalizeImage = (editor: Editor, nodeEntry: NodeEntry): boolean | 
   const [, path] = nodeEntry
   const children = Array.from(Node.children(editor, path))
 
-  if (children.length < 3) {
-    let hasText = false
+  if (children.length < 4) {
     let hasImage = false
+    let hasText = false
+    let hasByline = false
 
     for (const [child] of children) {
       if (!Element.isElement(child)) {
@@ -27,15 +28,19 @@ export const normalizeImage = (editor: Editor, nodeEntry: NodeEntry): boolean | 
       if (child.type === 'core/image/text') {
         hasText = true
       }
+
+      if (child.type === 'core/image/byline') {
+        hasByline = true
+      }
     }
 
     if (!hasImage) {
       // If image is gone, delete the whole block
       Transforms.removeNodes(editor, { at: path })
       return true
-    } else if (!hasText) {
-      // If either text is missing, add empty text node in the right position
-      const [addType, atPos] = ['core/image/text', 1]
+    } else if (!hasText || !hasByline) {
+      // If either text or byline is missing, add empty text node in the right position
+      const [addType, atPos] = (!hasByline) ? ['core/image/byline', 2] : ['core/image/text', 1]
       Transforms.insertNodes(
         editor,
         {
@@ -49,7 +54,6 @@ export const normalizeImage = (editor: Editor, nodeEntry: NodeEntry): boolean | 
       return true
     }
   }
-
 
   let n = 0
   for (const [child, childPath] of children) {
@@ -65,13 +69,28 @@ export const normalizeImage = (editor: Editor, nodeEntry: NodeEntry): boolean | 
     if (n === 1 && !TextbitElement.isOfType(child, 'core/image/text')) {
       Transforms.setNodes(
         editor,
-        { type: 'core/image/text' },
+        {
+          type: 'core/image/text',
+          class: 'text'
+        },
         { at: childPath }
       )
       return true
     }
 
-    if (n > 1) {
+    if (n === 2 && !TextbitElement.isOfType(child, 'core/image/byline')) {
+      Transforms.setNodes(
+        editor,
+        {
+          type: 'core/image/byline',
+          class: 'text'
+        },
+        { at: childPath }
+      )
+      return true
+    }
+
+    if (n > 2) {
       // Excessive nodes are lifted and transformed to text
       Transforms.setNodes(
         editor,

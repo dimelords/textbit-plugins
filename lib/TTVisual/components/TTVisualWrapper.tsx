@@ -1,9 +1,6 @@
 import React from 'react'
 import type { TBComponentProps } from '@ttab/textbit'
-import { X } from 'lucide-react'
-import { cn } from '../../cn'
-import { type Descendant, Transforms } from 'slate'
-import { FocusBlock } from '../../components/FocusBlock'
+import { Block } from '../../components/FocusBlock'
 
 type Child = React.ReactElement & {
   props: { children: { props: { element: { type: string } } } }
@@ -36,27 +33,8 @@ export const TTVisualWrapper = ({ children, element, editor, options }: TBCompon
   })
 
   return (
-    <FocusBlock className='my-2'>
-      <figure className='relative group flex gap-1 flex-col min-h-10'>
-        {removable && (
-          <div contentEditable={false} className='absolute hidden right-1 top-2 size-8 w-fit text-slate-900 dark:text-white justify-between items-center group-hover:block z-50'>
-            <div
-              className={cn('p-1 rounded opacity-70 bg-slate-200 hover:opacity-100 dark:bg-gray-700')}
-              onMouseDown={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                const n = editor.children.findIndex((child: Descendant) => child.id === element.id)
-
-                if (n > -1) {
-                  Transforms.removeNodes(editor, { at: [n] })
-                }
-              }}
-            >
-              <X size={15} />
-            </div>
-          </div>
-        )}
-
+    <Block className='my-2' editor={editor} element={element} removable={removable}>
+      <figure className='relative flex gap-1 flex-col min-h-10'>
         {imageNode}
 
         {textNode.map((child, index) => (
@@ -70,6 +48,6 @@ export const TTVisualWrapper = ({ children, element, editor, options }: TBCompon
           </div>
         ))}
       </figure>
-    </FocusBlock>
+    </Block>
   )
 }

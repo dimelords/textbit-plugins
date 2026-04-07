@@ -1,10 +1,11 @@
-import type { TBPluginInitFunction } from '@ttab/textbit'
+import type { TBPluginInitFunction, TBConsumeFunction, TBConsumesFunction, TBAction } from '@ttab/textbit'
 import { ImageIcon } from 'lucide-react'
 
 import {
   Figure,
   FigureImage,
-  FigureText
+  FigureText,
+  FigureByline
 } from './components'
 import { consume } from './lib/consume'
 import { consumes } from './lib/consumes'
@@ -17,24 +18,22 @@ export const Image: TBPluginInitFunction = (options) => {
     name: 'core/image',
     options,
     consumer: {
-      consumes,
-      consume
+      consumes: (options?.consumes as TBConsumesFunction) ?? consumes,
+      consume: (options?.consume as TBConsumeFunction) ?? consume
     },
-    actions: [
-      {
-        name: 'insert-image',
-        title: 'Image',
-        tool: () => <ImageIcon style={{ width: '1em', height: '1em' }} />,
-        handler: actionHandler,
-        visibility: () => {
-          return [
-            true, // Always visible
-            true, // Always enabled
-            false // Never active
-          ]
-        }
-      }
-    ],
+    actions: [{
+          name: 'insert-image',
+          title: 'Image',
+          tool: () => <ImageIcon style={{ width: '1em', height: '1em' }} />,
+          handler: actionHandler,
+          visibility: (options?.visibility as TBAction['visibility']) ?? (() => {
+            return [
+              true, // Always visible
+              true, // Always enabled
+              false // Never active
+            ]
+          })
+      }],
     componentEntry: {
       class: 'block',
       component: Figure,
@@ -51,6 +50,14 @@ export const Image: TBPluginInitFunction = (options) => {
           type: 'text',
           class: 'text',
           component: FigureText,
+          constraints: {
+            allowBreak: false
+          }
+        },
+        {
+          type: 'byline',
+          class: 'text',
+          component: FigureByline,
           constraints: {
             allowBreak: false
           }

@@ -25,6 +25,7 @@ export const actionHandler = ({ editor }: { editor: Editor }): void => {
 
   if (editor.selection) {
     Transforms.insertNodes(editor, node, { at: editor.selection });
+    return
   } else {
     console.warn('No selection found when inserting')
   }

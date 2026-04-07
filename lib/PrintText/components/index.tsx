@@ -5,10 +5,15 @@ import { type Descendant, Transforms } from 'slate'
 
 export const PrintText = ({ children, editor, element }: TBComponentProps & PropsWithChildren) => {
   return (
-    <>
-      <div className='border rounded p-1 py-2 font-serif'>
+    <div className='border rounded'>
+      <div
+        contentEditable={false}
+        draggable={true}
+        className='flex items-center justify-between bg-slate-300 dark:bg-slate-900 p-1 cursor-grab'
+      >
+        <span className='text-xs'>Print-text</span>
         <div
-          className='place-self-end hover:cursor-pointer hover:bg-slate-200 dark:hover:bg-gray-700 p-1 rounded'
+          className='hover:cursor-pointer hover:bg-slate-200 dark:hover:bg-gray-700 p-1 rounded'
           onMouseDown={(e) => {
             e.preventDefault()
             e.stopPropagation()
@@ -21,8 +26,8 @@ export const PrintText = ({ children, editor, element }: TBComponentProps & Prop
         >
           <X size={15} />
         </div>
-        {children}
       </div>
-    </>
+      {children}
+    </div>
   )
 }

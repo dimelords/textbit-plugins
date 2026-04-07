@@ -24,7 +24,7 @@ export const getTextStyles = (options: TBPluginOptions): TextStyleAction[] => {
       name: 'set-heading-1',
       role: 'heading-1',
       title: `${options?.titleLabel}` || 'Title',
-      hotkey: (options?.preventHotkeys as string[])?.includes('heading-1') ? undefined : 'mod+1',
+      hotkey: (options?.preventHotkeys as string[])?.includes('heading-1') ? undefined : 'mod+option+1',
       tool: () => <Heading1Icon style={{ width: '1em', height: '1em' }} />,
       handler: ({ editor }) => { convertTextType(editor, 'heading-1') },
       visibility: (element: Element) => toolVisibility(element, 'heading-1')
@@ -33,7 +33,7 @@ export const getTextStyles = (options: TBPluginOptions): TextStyleAction[] => {
       name: 'set-heading-2',
       role: 'heading-2',
       title: `${options?.subTitleLabel}` || 'Subtitle',
-      hotkey: (options?.preventHotkeys as string[])?.includes('heading-2') ? undefined : 'mod+2',
+      hotkey: (options?.preventHotkeys as string[])?.includes('heading-2') ? undefined : 'mod+option+2',
       tool: () => <Heading2Icon style={{ width: '1em', height: '1em' }} />,
       handler: ({ editor }) => convertTextType(editor, 'heading-2'),
       visibility: (element: Element) => toolVisibility(element, 'heading-2')
@@ -42,7 +42,7 @@ export const getTextStyles = (options: TBPluginOptions): TextStyleAction[] => {
       name: 'set-preamble',
       role: 'preamble',
       title: `${options?.preambleLabel}` || 'Preamble',
-      hotkey: (options?.preventHotkeys as string[])?.includes('preamble') ? undefined : 'mod+3',
+      hotkey: (options?.preventHotkeys as string[])?.includes('preamble') ? undefined : 'mod+option+3',
       tool: () => <ListStartIcon style={{ width: '1em', height: '1em' }} />,
       handler: ({ editor }) => convertTextType(editor, 'preamble'),
       visibility: (element: Element) => toolVisibility(element, 'preamble')
@@ -50,7 +50,7 @@ export const getTextStyles = (options: TBPluginOptions): TextStyleAction[] => {
     {
       name: 'set-body',
       title: `${options?.bodyTextLabel}` || 'Body text',
-      hotkey: 'mod+0',
+      hotkey: 'mod+option+0',
       tool: () => <TextIcon style={{ width: '1em', height: '1em' }} />,
       handler: ({ editor }) => convertTextType(editor),
       visibility: (element: Element) => toolVisibility(element)

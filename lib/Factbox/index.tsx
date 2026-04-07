@@ -26,7 +26,11 @@ export const Factbox: TBPluginInitFunction = (options) => {
         title: options?.addSingleLabel as string ?? 'Insert factbox',
         tool: () => <BoxIcon style={{ width: '1em', height: '1em' }} />,
         handler: actionHandler,
-        visibility: () => [true, true, false]
+        visibility: () => [
+          false, //  visible
+          true, //   enabled
+          false //   active
+        ]
       },
       {
         name: 'edit-factbox',
