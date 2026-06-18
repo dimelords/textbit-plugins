@@ -1,14 +1,14 @@
 import { Editor, Element, Transforms } from 'slate'
-import type { TBPluginInitFunction } from '@ttab/textbit'
+import type { TBPluginInitFunction, TBConsumeFunction } from '@ttab/textbit'
 import {
   Factbox as FactboxComponent,
   FactboxTitle
 } from './components'
-import { normalizeFactbox } from './lib/normalizeFactbox'
 import { consumes } from './lib/consumes'
 import { consume } from './lib/consume'
 import { FactboxBody } from './components/FactboxBody'
 import { actionHandler } from './lib/actionHandler'
+import { normalizeFactbox } from './lib/normalizeFactbox'
 import { BoxIcon } from 'lucide-react'
 
 export const Factbox: TBPluginInitFunction = (options) => {
@@ -18,7 +18,7 @@ export const Factbox: TBPluginInitFunction = (options) => {
     options,
     consumer: {
       consumes,
-      consume
+      consume: (options?.consume as TBConsumeFunction) ?? consume
     },
     actions: [
       {
@@ -27,7 +27,7 @@ export const Factbox: TBPluginInitFunction = (options) => {
         tool: () => <BoxIcon style={{ width: '1em', height: '1em' }} />,
         handler: actionHandler,
         visibility: () => [
-          false, //  visible
+          true, //  visible
           true, //   enabled
           false //   active
         ]
@@ -52,8 +52,7 @@ export const Factbox: TBPluginInitFunction = (options) => {
                 original_updated: args?.original_updated as string,
                 original_version: args?.original_version as string,
                 locally_changed: args?.locally_changed as string,
-                original_id: args?.original_id as string,
-                unSaved: args?.unSaved as boolean || false
+                original_id: args?.original_id as string
               }
             },
             { at: path }

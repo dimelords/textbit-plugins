@@ -17,6 +17,12 @@ const LOCALIZED_QUOTES: Record<string, string[]>  = {
   no: [
     '‹', '›',
     '«', '»'],
+  nb: [
+    '‹', '›',
+    '«', '»'],
+  nn: [
+    '‹', '›',
+    '«', '»'],
   en: [
     '‘', '’',
     '“', '”'],
@@ -106,14 +112,19 @@ export const consume: TBConsumeFunction = async ({ editor, input }) => {
   }
 
 
-  const basePos = selection.anchor.path[0] // Position of basenode in editor
+  // Iterate the sibling text leaves of the current text node. The current
+  // text node lives at selection.anchor.path; its parent block is the path
+  // with the last index dropped. Hard-coding depth 2 here fails when the
+  // text is nested deeper, e.g. inside a factbox embedded in an article.
+  const parentPath = Path.parent(selection.anchor.path)
+  const startIndex = selection.anchor.path[selection.anchor.path.length - 1]
   let firstOffset = selection.anchor.offset // Start text offset in first node
   let point // We will store the point of found quote, then traverse 2 more chars
   let prevChar: string = '' // We will keep track of the char that comes after the current char
 
   // From anchor inline node and backwards
-  for (let pos = selection.anchor.path[1]; pos >= 0; pos--) {
-    const [node, path] = Editor.node(editor, [basePos, pos])
+  for (let pos = startIndex; pos >= 0; pos--) {
+    const [node, path] = Editor.node(editor, [...parentPath, pos])
     if (!Text.isText(node)) {
       continue
     }
@@ -191,8 +202,11 @@ function isFirstCharacterOfFirstChild(editor: Editor, selection: BaseRange): boo
     return false
   }
 
-  // Get the first text node inside this block
-  const firstTextEntry = Node.first(editor, [selection.anchor.path[0], selection.anchor.path[1]])
+  // Find the first text descendant of the block containing the cursor.
+  // The block is the parent of the current text node; walking up from
+  // selection.anchor.path keeps this correct at any nesting depth.
+  const blockPath = Path.parent(anchor.path)
+  const firstTextEntry = Node.first(editor, blockPath)
   if (!firstTextEntry) {
     return false
   }

@@ -17,7 +17,7 @@ export const actionHandler = ({ editor, options }: TBActionHandlerArgs) => {
     properties: {
       original_id: id,
       original_updated: new Date().toISOString(),
-      unSaved: true
+      created: new Date().toISOString()
     },
     children: [
       {

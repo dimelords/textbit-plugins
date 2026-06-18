@@ -44,14 +44,20 @@ export const Image: TBPluginInitFunction = (options) => {
         {
           type: 'image',
           class: 'void',
-          component: FigureImage
+          component: FigureImage,
+          constraints: {
+            min: 1,
+            max: 1
+          }
         },
         {
           type: 'text',
           class: 'text',
           component: FigureText,
           constraints: {
-            allowBreak: false
+            allowBreak: false,
+            min: 1,
+            max: 1
           }
         },
         {
@@ -59,7 +65,9 @@ export const Image: TBPluginInitFunction = (options) => {
           class: 'text',
           component: FigureByline,
           constraints: {
-            allowBreak: false
+            allowBreak: false,
+            min: 1,
+            max: 1
           }
         }
       ]

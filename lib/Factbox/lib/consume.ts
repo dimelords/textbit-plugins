@@ -21,6 +21,7 @@ const createFactboxNode = (input: TBResource): TBResource => {
   const {
     text,
     title,
+    created,
     modified,
     id,
     original_version,
@@ -49,6 +50,7 @@ const createFactboxNode = (input: TBResource): TBResource => {
       properties: {
         title,
         text,
+        created,
         modified,
         id,
         original_id: id,

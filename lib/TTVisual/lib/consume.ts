@@ -15,11 +15,6 @@ export const consume: TBConsumeFunction = async ({ input }) => {
   return createTTVisualNode(input)
 }
 
-/**
-* Create a TTVisual node
-* @param {VisualPropertiesInterface} props
-* @returns {TTVisualInterface}
-*/
 const createTTVisualNode = async (input: TBResource): Promise<TBResource> => {
   const props = await createVisualProperties(input)
 
@@ -43,7 +38,7 @@ const createTTVisualNode = async (input: TBResource): Promise<TBResource> => {
       children: [
         {
           type: 'tt/visual/image',
-          class: 'block',
+          class: 'void',
           children: [{ text: props.href }]
         },
         {
@@ -62,20 +57,32 @@ const createTTVisualNode = async (input: TBResource): Promise<TBResource> => {
 }
 
 /**
-* Get image resolution without downloading the image
+* Get image resolution without downloading the image.
+*
+* Rejects after 15s if neither onload nor onerror fires (e.g. CORS preflight
+* stall, DNS hang). Without this, `consume()` could hang indefinitely and
+* leave a phantom loader in the editor.
+*
 * @param {string} url
 * @returns {Promise<{ width: number, height: number } | null>}
 * @throws {Error}
 */
+const IMAGE_RESOLUTION_TIMEOUT_MS = 15_000
+
 const getImageResolution = async (url: string): Promise<{ width: number, height: number } | null> => {
   return await new Promise((resolve, reject) => {
     const img = new Image()
+    const timer = setTimeout(() => {
+      reject(new Error(`Timed out loading image after ${IMAGE_RESOLUTION_TIMEOUT_MS}ms`))
+    }, IMAGE_RESOLUTION_TIMEOUT_MS)
 
     img.onload = () => {
+      clearTimeout(timer)
       resolve({ width: img.width, height: img.height })
     }
 
     img.onerror = () => {
+      clearTimeout(timer)
       reject(new Error('Failed to load image'))
     }
 

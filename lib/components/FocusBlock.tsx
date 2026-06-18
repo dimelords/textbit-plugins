@@ -11,11 +11,16 @@ export const Block = ({ children, className, editor, element, removable }: Props
   element?: TBElement
   removable?: boolean
 }) => {
+  const isFirst = !!editor && !!element && (editor.children as TBElement[])[0]?.id === element.id
+
   return (
     <div
       className={cn(
         'relative',
-        removable && 'group', className)}
+        removable && 'group',
+        className,
+        isFirst && 'mb-3',
+        !isFirst && 'my-3')}
     >
       <div className='relative rounded'>
         {removable && editor && element && (

@@ -39,12 +39,20 @@ export const Blockquote: TBPluginInitFunction = () => {
         {
           type: 'body',
           class: 'text',
-          component: BlockquoteBody
+          component: BlockquoteBody,
+          constraints: {
+            min: 1,
+            max: 1
+          }
         },
         {
           type: 'caption',
           class: 'text',
-          component: BlockquoteCaption
+          component: BlockquoteCaption,
+          constraints: {
+            min: 1,
+            max: 1
+          }
         }
       ]
     }

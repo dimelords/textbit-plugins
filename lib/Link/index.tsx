@@ -14,10 +14,11 @@ import { actionHandler as handler } from './lib/actionHandler'
  * 5.   Add InlineChromiumBugfix as is in https://github.com/ianstormtaylor/slate/blob/main/site/examples/inlines.tsx
  */
 
-const Link: TBPluginInitFunction = () => {
+const Link: TBPluginInitFunction = (options) => {
   return {
     class: 'inline',
     name: 'core/link',
+    options,
     componentEntry: {
       class: 'inline',
       component: LinkComponent

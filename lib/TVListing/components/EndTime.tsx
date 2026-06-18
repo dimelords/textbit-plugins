@@ -1,10 +1,8 @@
-import type { PropsWithChildren } from "react"
+import type { TBComponentProps } from '@ttab/textbit'
+import { FieldRow } from './FieldRow'
 
-export const EndTime = ({ children }: PropsWithChildren) => {
-  return (
-    <div className="border-b">
-      <div contentEditable={false} className="font-semibold">Sluttid</div>
-      {children}
-    </div>
-  )
-}
+export const EndTime = ({ editor, element, children }: TBComponentProps) => (
+  <FieldRow editor={editor} element={element} label='Sluttid'>
+    {children}
+  </FieldRow>
+)

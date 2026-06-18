@@ -1,7 +1,7 @@
 import type { TBPluginInitFunction } from '@ttab/textbit'
 import { PrintText as PrintTextComponent } from './components'
 import { actionHandler } from './lib/actionHandler'
-import { Text } from 'lucide-react'
+import { FileTypeCornerIcon } from 'lucide-react'
 import { TextRole } from './components/TextRole'
 import { Text as TextComponent } from './components/Text'
 import { normalizePrintText } from './lib/normalizePrintText'
@@ -16,7 +16,7 @@ export const PrintText: TBPluginInitFunction = (options) => {
       {
         name: 'tt/print-text',
         title: 'Print-text',
-        tool: () => <Text style={{ width: '1em', height: '1em' }} />,
+        tool: () => <FileTypeCornerIcon style={{ width: '1em', height: '1em' }} />,
         handler: actionHandler,
         visibility: () => [true, true, false]
       }
@@ -31,12 +31,20 @@ export const PrintText: TBPluginInitFunction = (options) => {
         {
           type: 'text',
           class: 'text',
-          component: TextComponent
+          component: TextComponent,
+          constraints: {
+            min: 1,
+            max: 1
+          }
         },
         {
           type: 'role',
           class: 'text',
-          component: TextRole
+          component: TextRole,
+          constraints: {
+            min: 1,
+            max: 1
+          }
         }
       ]
     }

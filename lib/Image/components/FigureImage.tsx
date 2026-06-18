@@ -42,7 +42,7 @@ export const FigureImage = ({ editor, children, rootNode, options }: TBComponent
   const focus = parseFocusString(focusStr)
 
   return (
-    <div contentEditable={false}>
+    <div contentEditable={false} draggable={true}>
       <div ref={imgContainerRef} className='relative rounded rounded-xs overflow-hidden'>
         {/* Full image */}
         <img width='100%' src={resolvedSrc} />

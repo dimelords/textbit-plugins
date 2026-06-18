@@ -10,39 +10,6 @@ export const normalizeBlockquote = (editor: Editor, nodeEntry: NodeEntry): boole
   const [, path] = nodeEntry
   const children = Array.from(Node.children(editor, path))
 
-  if (children.length === 1) {
-    // Ensure there is text, or remove the node entirely
-    let textFound = false
-    for (const [child] of children) {
-      for (const textNode of Node.texts(child)) {
-        if (textNode[0].text.trim() !== '') {
-          textFound = true
-        }
-      }
-    }
-
-    if (!textFound) {
-      Transforms.removeNodes(editor, { at: path })
-      return true
-    }
-
-    // Add missing body or caption
-    const [addType, atPos] = TextbitElement.isOfType(children[0][0], 'core/blockquote/caption') ? ['core/blockquote/body', 0] : ['core/blockquote/caption', 1]
-
-    Transforms.insertNodes(
-      editor,
-      {
-        id: crypto.randomUUID(),
-        class: 'text',
-        type: addType,
-        children: [{ text: '' }]
-      },
-      { at: [...path, atPos] }
-    )
-    return true
-  }
-
-  let n = 1
   for (const [child, childPath] of children) {
     if (TextbitElement.isBlock(child)) {
       // Unwrap block node children (move text element children upwards in tree)
@@ -53,8 +20,13 @@ export const normalizeBlockquote = (editor: Editor, nodeEntry: NodeEntry): boole
       return true
     }
 
-    if (n < children.length && TextbitElement.isText(child) && !TextbitElement.isOfType(child, 'core/blockquote/body')) {
-      // Turn unknown text elements to /core/blockquote/body
+    // Coerce unknown text elements into body so they fold into the blockquote
+    // structure rather than getting stripped by the cardinality enforcement.
+    if (
+      TextbitElement.isText(child)
+      && !TextbitElement.isOfType(child, 'core/blockquote/body')
+      && !TextbitElement.isOfType(child, 'core/blockquote/caption')
+    ) {
       Transforms.setNodes(
         editor,
         { type: 'core/blockquote/body' },
@@ -62,29 +34,5 @@ export const normalizeBlockquote = (editor: Editor, nodeEntry: NodeEntry): boole
       )
       return true
     }
-
-    // Make sure last element is a caption
-    if (n === children.length && !TextbitElement.isOfType(child, 'core/blockquote/caption')) {
-      Transforms.setNodes(
-        editor,
-        { type: 'core/blockquote/caption' },
-        { at: childPath }
-      )
-      return true
-    }
-
-    if (n > 2) {
-      // Excessive nodes are lifted and transformed to text
-      Transforms.setNodes(
-        editor,
-        { type: 'core/text', properties: {} },
-        { at: childPath }
-      )
-      Transforms.liftNodes(
-        editor,
-        { at: childPath }
-      )
-    }
-    n++
   }
 }

@@ -14,3 +14,22 @@ export const formatDate = (date?: string, locale?: string): string => {
   const relativeTime = rtf.format(Math.floor(secondsDiff / divisor), units[unitIndex])
   return relativeTime
 }
+
+export const formatDateShort = (date?: string): string => {
+  if (!date) {
+    return ''
+  }
+
+  const d = new Date(date)
+  if (isNaN(d.getTime())) {
+    return ''
+  }
+
+  return new Intl.DateTimeFormat('sv-SE', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
+  }).format(d)
+}

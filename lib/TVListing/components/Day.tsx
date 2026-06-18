@@ -1,10 +1,8 @@
-import type { PropsWithChildren } from "react"
+import type { TBComponentProps } from '@ttab/textbit'
+import { FieldRow } from './FieldRow'
 
-export const Day = ({ children }: PropsWithChildren) => {
-  return (
-    <div className="border-b">
-      <div contentEditable={false} className="font-semibold">Dag</div>
-      {children}
-    </div>
-  )
-}
+export const Day = ({ editor, element, children }: TBComponentProps) => (
+  <FieldRow editor={editor} element={element} label='Dag'>
+    {children}
+  </FieldRow>
+)

@@ -29,14 +29,20 @@ export const TTVisual: TBPluginInitFunction = (options) => {
         {
           type: 'image',
           class: 'void',
-          component: TTVisualImage
+          component: TTVisualImage,
+          constraints: {
+            min: 1,
+            max: 1
+          }
         },
         {
           type: 'text',
           class: 'text',
           component: TTVisualText,
           constraints: {
-            allowBreak: false
+            allowBreak: false,
+            min: 1,
+            max: 1
           }
         },
         {
@@ -44,7 +50,9 @@ export const TTVisual: TBPluginInitFunction = (options) => {
           class: 'text',
           component: TTVisualByline,
           constraints: {
-            allowBreak: false
+            allowBreak: false,
+            min: 1,
+            max: 1
           }
         }
       ]

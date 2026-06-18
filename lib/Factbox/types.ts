@@ -1,6 +1,7 @@
 export interface FactboxProperties {
   title: string
   text: string
+  created?: string
   modified?: string
   id?: string
   original_updated?: string

@@ -1,7 +1,7 @@
 {
   "name": "@dimelords/textbit-plugins",
   "description": "Base package of common plugins for textbit",
-  "version": "1.5.0",
+  "version": "1.6.6",
   "license": "MIT",
   "author": {
     "name": "Danne Lundqvist"
@@ -17,14 +17,14 @@
     "type": "git",
     "url": "git+https://github.com/dimelords/textbit-plugins.git"
   },
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
+  "main": "./dist/index.cjs.js",
+  "module": "./dist/index.esm.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "import": {
         "types": "./dist/index.d.ts",
-        "default": "./dist/index.es.js"
+        "default": "./dist/index.esm.js"
       },
       "require": {
         "types": "./dist/index.d.ts",
@@ -48,8 +48,8 @@
     "lucide-react": ">=0.475.0",
     "react": "^18.0.0 || ^19.0.0",
     "react-dom": "^18.0.0 || ^19.0.0",
-    "slate": "^0.123.0",
-    "slate-react": "^0.123.0",
+    "slate": "^0.124.1",
+    "slate-react": "^0.124.0",
     "yjs": "^13.6.26"
   },
   "devDependencies": {
@@ -59,37 +59,37 @@
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.5.2",
     "@types/jest": "^29.5.14",
-    "@types/node": "^22.13.4",
+    "@types/node": "^25.6.0",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@typescript-eslint/eslint-plugin": "^8.13.0",
-    "@vitejs/plugin-react-swc": "^3.8.0",
+    "@vitejs/plugin-react-swc": "^4.3.0",
     "autoprefixer": "^10.4.19",
-    "eslint": "^9.20.1",
+    "eslint": "^9.39.0",
     "eslint-config-love": "^133.0.0",
     "eslint-plugin-react": "^7.37.4",
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "glob": "^11.0.1",
-    "happy-dom": "^17.1.0",
+    "happy-dom": "^20.9.0",
     "lucide-react": "^0.555.0",
-    "postcss": "^8.4.47",
+    "postcss": "^8.5.14",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "slate": "^0.123.0",
+    "slate": "^0.124.1",
     "slate-history": "^0.113.1",
-    "slate-react": "^0.123.0",
+    "slate-react": "^0.124.0",
     "tailwindcss": "^3.4.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.6.3",
-    "vite": "^7.2.2",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.10",
     "vite-plugin-dts": "^4.5.0",
     "vite-plugin-lib-inject-css": "^2.2.1",
-    "vitest": "^4.0.8",
+    "vitest": "^4.1.5",
     "yjs": "^13.6.26"
   },
   "dependencies": {
-    "@ttab/textbit": "^1.1.0",
+    "@ttab/textbit": "^1.5.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.0.2"

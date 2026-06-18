@@ -27,12 +27,20 @@ export const OEmbed: TBPluginInitFunction = () => {
         {
           type: 'embed',
           class: 'void',
-          component: OembedVideo
+          component: OembedVideo,
+          constraints: {
+            min: 1,
+            max: 1
+          }
         },
         {
           type: 'title',
           class: 'text',
-          component: OembedTitle
+          component: OembedTitle,
+          constraints: {
+            min: 1,
+            max: 1
+          }
         }
       ]
     }

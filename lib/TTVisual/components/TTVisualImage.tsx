@@ -23,7 +23,11 @@ export const TTVisualImage = ({ editor, children, rootNode, options }: TBCompone
 
   return (
     <div contentEditable={false}>
-      <div ref={imgContainerRef} className='relative rounded rounded-xs overflow-hidden'>
+      <div
+        ref={imgContainerRef}
+        draggable={true}
+        className='relative rounded rounded-xs overflow-hidden'
+      >
         <img width='100%' src={proxy || href} />
 
         {!!options?.enableCrop &&

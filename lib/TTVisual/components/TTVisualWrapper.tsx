@@ -33,7 +33,7 @@ export const TTVisualWrapper = ({ children, element, editor, options }: TBCompon
   })
 
   return (
-    <Block className='my-2' editor={editor} element={element} removable={removable}>
+    <Block editor={editor} element={element} removable={removable}>
       <figure className='relative flex gap-1 flex-col min-h-10'>
         {imageNode}
 

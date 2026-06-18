@@ -66,11 +66,15 @@ export const getTextStyles = (options: TBPluginOptions): TextStyleAction[] => {
     }
   ]
 
-  if (Array.isArray(options.styles)) {
-    return textStyles.filter(ts => (options.styles as string[]).includes(ts.name))
-  }
-
-  return textStyles
+  return textStyles.filter(ts => {
+    if (ts.role && Array.isArray(options.hiddenStyles) && (options.hiddenStyles as string[]).includes(ts.role)) {
+      return false
+    }
+    if (ts.role && Array.isArray(options.styles) && !(options.styles as string[]).includes(ts.role)) {
+      return false
+    }
+    return true
+  })
 }
 
 function toolVisibility(element: Element, role?: string): [boolean, boolean, boolean] {

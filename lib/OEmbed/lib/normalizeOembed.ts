@@ -7,18 +7,10 @@ import {
 import { TextbitElement } from '@ttab/textbit'
 
 
-export const normalizeOembed = (editor: Editor, nodeEndtry: NodeEntry): boolean | undefined => {
-  const [, path] = nodeEndtry
-  const children = Array.from(Node.children(editor, path))
+export const normalizeOembed = (editor: Editor, nodeEntry: NodeEntry): boolean | undefined => {
+  const [, path] = nodeEntry
 
-  if (children.length < 2) {
-    Transforms.removeNodes(editor, { at: [path[0]] })
-    return true
-  }
-
-
-  let n = 0
-  for (const [child, childPath] of children) {
+  for (const [child, childPath] of Node.children(editor, path)) {
     if (TextbitElement.isBlock(child)) {
       // Unwrap block node children (move text element children upwards in tree)
       Transforms.unwrapNodes(editor, {
@@ -27,28 +19,5 @@ export const normalizeOembed = (editor: Editor, nodeEndtry: NodeEntry): boolean 
       })
       return true
     }
-
-    if (n === 1 && !TextbitElement.isOfType(child, 'core/oembed/title')) {
-      Transforms.setNodes(
-        editor,
-        { type: 'core/oembed/text' },
-        { at: childPath }
-      )
-      return true
-    }
-
-    if (n > 1) {
-      // Excessive nodes are lifted and transformed to text
-      Transforms.setNodes(
-        editor,
-        { type: 'core/text', properties: {} },
-        { at: childPath }
-      )
-      Transforms.liftNodes(
-        editor,
-        { at: childPath }
-      )
-    }
-    n++
   }
 }

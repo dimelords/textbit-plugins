@@ -24,6 +24,7 @@ export const Table: TBPluginInitFunction = () => {
           type: 'row',
           class: 'block',
           component: TableRow,
+          asOwnElement: true,
           children: [
             {
               type: 'cell',
@@ -31,7 +32,8 @@ export const Table: TBPluginInitFunction = () => {
               constraints: {
                 allowBreak: false
               },
-              component: TableCell
+              component: TableCell,
+              asOwnElement: true
             }
           ]
         }
