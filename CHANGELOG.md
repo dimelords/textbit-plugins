@@ -1,5 +1,23 @@
 # @ttab/textbit-plugins
 
+## 1.8.0
+
+### Minor Changes
+
+- Removes the OEmbed plugin. Nothing registered it: not the monorepo chrome, not
+  the standalone elephant-chrome that production runs, and chrome has no NewsDoc
+  transformation for core/oembed, so such blocks could never be read or written.
+  It could not have worked either way, since its consume returned the input MIME
+  type rather than the core/oembed it declared, and the pipe discards a result
+  whose type does not match.
+
+### Patch Changes
+
+- Set default role text value to 'question' in print-text action handler instead of empty string.
+
+- The TV listing init dialog confirms on Enter when the form is valid, the same as clicking
+  'Lägg till'. Enter is left alone when focus is on the channel combobox or the footer buttons.
+
 ## 1.7.0
 
 ### Minor Changes

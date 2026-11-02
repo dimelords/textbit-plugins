@@ -1,9 +1,13 @@
 import { useEffect, useMemo, type ReactNode } from 'react'
 import { Textbit, type TBPluginDefinition, type TBPluginOptions, type TBElement } from '@ttab/textbit'
-import { Node, type Descendant } from 'slate'
+import { type Descendant } from 'slate'
 import { useSlate } from 'slate-react'
 import { buildComponentEntry } from '../componentEntry'
-import { ALL_FIELDS, buildPlaceholderChildren, MANDATORY_FIELDS, type TVLField } from '../fields'
+import { ALL_FIELDS, buildPlaceholderChildren } from '../fields'
+import { isBlockValid } from '../lib/isBlockValid'
+
+/** Elements that give Enter a meaning of their own, ie the channel combobox and the buttons. */
+const OWNS_ENTER = 'button, input, textarea, select, [role="combobox"], [role="option"]'
 
 interface TVLInitDialogProps {
   options?: TBPluginOptions
@@ -80,6 +84,31 @@ const Footer = ({
   const block = editor.children[0] as TBElement | undefined
   const isValid = isBlockValid(block)
 
+  // Confirm on Enter from anywhere in the form, on the same condition that enables the button.
+  // Capture phase so the keystroke never reaches the nested editor.
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== 'Enter' || e.shiftKey || e.ctrlKey || e.altKey || e.metaKey) {
+        return
+      }
+
+      if (e.target instanceof HTMLElement && e.target.closest(OWNS_ENTER)) {
+        return
+      }
+
+      if (!isValid || !block) {
+        return
+      }
+
+      e.preventDefault()
+      e.stopPropagation()
+      onConfirm(block)
+    }
+
+    document.addEventListener('keydown', onKeyDown, true)
+    return () => document.removeEventListener('keydown', onKeyDown, true)
+  }, [isValid, block, onConfirm])
+
   return (
     <div className='flex justify-end gap-2 pt-2'>
       <button
@@ -99,25 +128,4 @@ const Footer = ({
       </button>
     </div>
   )
-}
-
-const isBlockValid = (block: TBElement | undefined): boolean => {
-  if (!block || block.type !== 'tt/tv-listing') return false
-  const children = (block.children as TBElement[] | undefined) ?? []
-  if (children.length === 0) return false
-
-  const presentFields = new Set(
-    children.map((c) => c.type.replace('tt/tv-listing/', '') as TVLField)
-  )
-  if (!MANDATORY_FIELDS.every((f) => presentFields.has(f))) return false
-
-  return children.every((child) => {
-    const field = child.type.replace('tt/tv-listing/', '') as TVLField
-    if (field === 'channel') {
-      const name = (block.properties?.channel as string | undefined)?.trim() ?? ''
-      const uri = (block.properties?.uri as string | undefined)?.trim() ?? ''
-      return !!name && !!uri
-    }
-    return Node.string(child).trim().length > 0
-  })
 }

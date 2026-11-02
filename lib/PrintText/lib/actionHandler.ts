@@ -17,7 +17,7 @@ export const actionHandler = ({ editor }: { editor: Editor }): void => {
         id: crypto.randomUUID(),
         class: 'text',
         type: 'tt/print-text/role',
-        children: [{ text: '' }]
+        children: [{ text: 'question' }]
       }
     ]
   }]
