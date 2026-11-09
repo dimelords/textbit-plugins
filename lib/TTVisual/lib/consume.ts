@@ -1,6 +1,6 @@
 import type { TBConsumeFunction, TBResource } from '@ttab/textbit'
 import type { VisualPropertiesInterface } from '../types'
-import parseImageId, { parseJSON } from './parseImageId'
+import { parseImageId, parseJSON } from './parseImageId'
 
 export const consume: TBConsumeFunction = async ({ input }) => {
   if (Array.isArray(input)) {

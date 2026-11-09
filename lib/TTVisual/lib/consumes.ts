@@ -1,5 +1,5 @@
 import type { TBConsumesFunction } from '@ttab/textbit'
-import parseImageId from './parseImageId'
+import { parseImageId } from './parseImageId'
 
 export const consumes: TBConsumesFunction = ({ input }) => {
   const { type, data } = input

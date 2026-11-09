@@ -1,10 +1,8 @@
 import js from '@eslint/js'
-import globals from 'globals'
 import reactPlugin from 'eslint-plugin-react'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
-import love from 'eslint-config-love'
 
 export default [
   { ignores: ['dist', '*/**/test.*'] },
@@ -19,8 +17,11 @@ export default [
     },
     languageOptions: {
       ecmaVersion: 2020,
-      globals: globals.browser,
       parser: tseslint.parser,
+      parserOptions: {
+        // Inference breaks when an editor loads several package configs at once.
+        tsconfigRootDir: import.meta.dirname,
+      },
     },
     settings: {
       react: {

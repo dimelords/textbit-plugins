@@ -27,7 +27,7 @@ export const actionHandler = (editor: Editor, typeName: string): void => {
     properties: {}
   }
 
-  Transforms.setNodes(editor, newProperties, {
+  Transforms.setNodes<Element>(editor, newProperties, {
     match: (n) => {
       return !Editor.isEditor(n) &&
         TextbitElement.isElement(n) &&

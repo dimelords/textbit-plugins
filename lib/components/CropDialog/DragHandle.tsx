@@ -113,6 +113,8 @@ export const DragHandle = ({ side, offset, opposite, onChange, size }: {
       newOffset,
       1 - opposite - (handleWidth * 2 / size)
     ))
+    // TODO: add 'opposite' to the deps, or say here why it stays out
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDragging, dragStart, initialOffset, side, size, onChange])
 
   const handleMouseUp = useCallback(() => {
@@ -155,6 +157,8 @@ export const DragHandle = ({ side, offset, opposite, onChange, size }: {
       newOffset,
       1 - opposite - (handleWidth * 2 / size)
     ))
+    // TODO: add 'opposite' to the deps, or say here why it stays out
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDragging, dragStart, initialOffset, side, size, onChange])
 
   const handleTouchEnd = useCallback(() => {

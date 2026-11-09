@@ -1,6 +1,6 @@
 import { type VisualPropertiesInterface } from '../types'
 
-function parseImageId(data: string): string | undefined {
+export function parseImageId(data: string): string | undefined {
   // Is it a URL?
   if (URL.canParse(data)) {
     const url = new URL(data)
@@ -35,10 +35,7 @@ function idMatcher(value: string): string | undefined {
 export function parseJSON(value: string): VisualPropertiesInterface | false {
   try {
     return JSON.parse(value)
-  } catch (e) {
+  } catch {
     return false
   }
 }
-
-
-export default parseImageId

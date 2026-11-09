@@ -11,7 +11,7 @@
     "skipLibCheck": true,
     "types": [
       "node",
-      "jest"
+      "vitest/globals"
     ],
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -33,7 +33,7 @@
     "src",
     "lib",
     "vite.config.ts",
-    "jest.config.ts",
-    "tests"
+    "vitest.config.ts",
+    "__tests__"
   ]
 }

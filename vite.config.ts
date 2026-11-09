@@ -1,21 +1,22 @@
 import { join, resolve, relative, extname } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import react from '@vitejs/plugin-react-swc'
+import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 import dts from 'vite-plugin-dts'
 import { glob } from 'glob'
 import path from 'path'
 
-import { peerDependencies } from './package.json'
+import pkg from './package.json' with { type: 'json' }
 
 export default defineConfig({
+  logLevel: 'warn',
   plugins: [
     react(),
-    dts({ rollupTypes: true })
+    dts({ bundleTypes: true })
   ],
   resolve: {
     alias: {
-      'yjs': path.resolve(__dirname, './node_modules/yjs')
+      'yjs': path.resolve(import.meta.dirname, './node_modules/yjs')
     },
     dedupe: [
       'react',
@@ -33,14 +34,14 @@ export default defineConfig({
     target: 'esnext',
     minify: true,
     lib: {
-      entry: resolve(__dirname, join('lib', 'index.ts')),
+      entry: resolve(import.meta.dirname, join('lib', 'index.ts')),
       formats: ['es', 'cjs']
     },
     rollupOptions: {
       // Exclude peer dependencies from the bundle to reduce bundle size
       external: [
         'react/jsx-runtime',
-        ...Object.keys(peerDependencies)
+        ...Object.keys(pkg.peerDependencies)
       ],
       input: Object.fromEntries(
         glob.sync('lib/**/*.{ts,tsx}').map(file => [

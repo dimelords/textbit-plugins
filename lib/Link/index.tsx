@@ -4,6 +4,7 @@ import { Link as LinkComponent } from './components/Link'
 import { EditLink as EditLinkComponent } from './components/EditLink'
 
 import { actionHandler as handler } from './lib/actionHandler'
+import { normalizeNode } from './lib/normalizeNode'
 
 /**
  * FIXME
@@ -21,7 +22,10 @@ const Link: TBPluginInitFunction = (options) => {
     options,
     componentEntry: {
       class: 'inline',
-      component: LinkComponent
+      component: LinkComponent,
+      constraints: {
+        normalizeNode
+      }
     },
     actions: [{
       name: 'link',

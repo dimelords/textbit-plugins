@@ -38,6 +38,8 @@ export const CropDialogMenu = ({onToggle, onZoom, onReset, active }: {
     return () => {
       document.removeEventListener('keydown', onKeyDown)
     }
+    // TODO: add 'onZoom' and 'onReset' to the deps, or say here why they stay out
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [active, onToggle])
 
   return (

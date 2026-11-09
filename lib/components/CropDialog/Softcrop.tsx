@@ -251,6 +251,8 @@ const Softcrop = forwardRef<SoftcropRef, SoftcropProps>(({
     return () => {
       wrapper.removeEventListener('wheel', handleWheelEvent)
     }
+    // TODO: add 'enablePanAndZoom' to the deps, or say here why it stays out
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [containerSize, maxZoom, zoomSensitivity])
 
   // Mouse/touch handlers for pan - directly modify base crop
@@ -284,6 +286,8 @@ const Softcrop = forwardRef<SoftcropRef, SoftcropProps>(({
 
     // Update drag start for continuous movement
     setDragStart({ x: e.clientX, y: e.clientY })
+    // TODO: add 'enablePanAndZoom' to the deps, or say here why it stays out
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPressed, dragStart, displayDimensions, getDisplayTransform])
 
   const handleMouseUp = useCallback((e: React.MouseEvent) => {
@@ -315,6 +319,8 @@ const Softcrop = forwardRef<SoftcropRef, SoftcropProps>(({
     }
 
     setIsDragging(false)
+    // TODO: add 'isDragging' to the deps, or say here why it stays out
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dragStart, getDisplayTransform, displayDimensions])
 
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
@@ -349,6 +355,8 @@ const Softcrop = forwardRef<SoftcropRef, SoftcropProps>(({
     })
 
     setDragStart({ x: e.touches[0].clientX, y: e.touches[0].clientY })
+    // TODO: add 'enablePanAndZoom' to the deps, or say here why it stays out
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPressed, dragStart, displayDimensions, getDisplayTransform])
 
   const handleTouchEnd = useCallback(() => {
@@ -415,6 +423,8 @@ const Softcrop = forwardRef<SoftcropRef, SoftcropProps>(({
       getCombinedCropArea(),
       enableFocusPoint ? focusPoint : null
     )
+    // TODO: add 'enableFocusPoint' to the deps, or say here why it stays out
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [baseCrop, dragOffsets, focusPoint, onChange, isReady, getCombinedCropArea])
 
   // Get current display transform
@@ -489,6 +499,8 @@ const Softcrop = forwardRef<SoftcropRef, SoftcropProps>(({
         focusPointRef.current.style.display = 'none'
       }
     }
+    // TODO: add 'enableFocusPoint' to the deps, or say here why it stays out
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }), [baseCrop, dragOffsets, focusPoint, getCombinedCropArea, getCropOffsets, zoomSensitivity, maxZoom, containerSize])
 
   return (
